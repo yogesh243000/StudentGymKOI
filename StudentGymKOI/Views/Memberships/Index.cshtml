@@ -1,0 +1,67 @@
+﻿@model IEnumerable<StudentGymKOI.Models.Membership>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+@if (User.IsInRole("Gym Staff"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberShipName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ViewBag.Memberships) {
+        <tr>
+            <td>
+                @item.MemberShipName
+            </td>
+            <td>
+                @item.Price
+            </td>
+            <td>
+
+                    <a asp-action="Details" asp-route-id="@item.MembershipID">Details</a>
+
+                    @if (User.IsInRole("Gym Staff"))
+                    {
+                        
+                        <a asp-action="Edit" asp-route-id="@item.MembershipID">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.MembershipID">Delete</a>
+                    }
+
+                    @if (User.IsInRole("Member"))
+                    {
+                        @if (ViewBag.UserMembership == null || ViewBag.UserMembership.MemberShipName != item.MemberShipName)
+                        {
+                            <a asp-controller="UserMembership" asp-action="JoinMembership" asp-route-membershipID="@item.MembershipID">Join</a>
+                        }
+                        else{
+
+                            <span>Joined</span>
+
+                        }
+                        
+                        
+                    }
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

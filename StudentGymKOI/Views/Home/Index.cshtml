@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (TempData["JoinSuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["JoinSuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+@if (ViewData["UserRole"] != null)
+{
+    <h2>Your Role: @ViewData["UserRole"]</h2>
+}
+
+@if (User.IsInRole("Member"))
+{
+    @if (ViewBag.Memberships != null && ViewBag.Memberships.Count > 0)
+    {
+        <h3>Your Current Membership:</h3>
+        <ul>
+            @foreach (var membership in ViewBag.Memberships)
+            {
+                <li>@membership.MemberShipName</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You do not have any memberships.</p>
+    }
+    
+}
+
+
+
+<h2 class="display-4">Group Members</h2>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th scope="col">Student ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Student Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+                <td>12002089</td>
+                <td>Ruzal Shrestha</td>
+                <td>12002089@students.koi.edu.au</td>
+            </tr>
+            <tr>
+
+                <td>12100548</td>
+                <td>Asad Zahid</td>
+                <td>12100548@students.koi.edu.au</td>
+            </tr>
+            <tr>
+
+                <td>12200835</td>
+                <td>Yogesh Baruwal Chhetri</td>
+                <td>12200835@students.koi.edu.au</td>
+            </tr>
+            <tr>
+
+                <td>20014748</td>
+                <td>Harkirat Singh</td>
+                <td>20014748@students.koi.edu.au</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
