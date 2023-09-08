@@ -30,9 +30,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        
 
                         @if (SignInManager.IsSignedIn(User))
                         {
@@ -42,12 +40,15 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item text-dark" asp-controller="Memberships" asp-action="Index">Memberships</a></li>
-                                    <li><a class="dropdown-item text-dark" href="#">Another action</a></li>
+                                    <li><a class="dropdown-item text-dark" asp-controller="GymClasses" asp-action="Index">Gym Classes</a></li>
                                     
                                 </ul>
                             </li>
                             
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
                         
                        
                     </ul>

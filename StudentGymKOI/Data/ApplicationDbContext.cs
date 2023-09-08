@@ -12,5 +12,6 @@ namespace StudentGymKOI.Data
         }
         public DbSet<StudentGymKOI.Models.Membership>? Membership { get; set; }
         public DbSet<StudentGymKOI.Models.UserMembership>? UserMembership { get; set; }
+        public DbSet<StudentGymKOI.Models.GymClass>? GymClass { get; set; }
     }
 }
