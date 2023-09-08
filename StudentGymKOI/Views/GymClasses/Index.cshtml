@@ -25,24 +25,52 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in ViewBag.GymClasses) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ClassName)
+                @item.ClassName
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MaxMembers)
+                @item.MaxMembers
             </td>
             <td>
 
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     @if (User.IsInRole("Gym Staff"))
                     {
                         
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    @if (User.IsInRole("Member"))
+
+                    {
+                        bool joined = false;
+
+                        foreach (var userGymClass in ViewBag.UserGymClasses)
+                        {
+                            if (userGymClass.Id == item.Id)
+                            {
+                                joined = true;
+                                break;
+                            }
+                        }
+
+                        if (joined)
+                        {
+                            <span>Joined</span>
+                        }
+                        else
+                        {
+                            <a asp-controller="UserGymClasses" asp-action="JoinGymClass" asp-route-gymClassID="@item.Id">Join</a>
+                        }
+
+                        
                     }
 
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+
+
             </td>
         </tr>
 }

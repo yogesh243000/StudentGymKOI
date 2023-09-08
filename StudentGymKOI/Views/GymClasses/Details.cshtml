@@ -30,5 +30,30 @@
         
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
     }
+
+    @if (User.IsInRole("Member"))
+    {
+        bool joined = false;
+
+        foreach (var userGymClass in ViewBag.UserGymClasses)
+        {
+            if (userGymClass.Id == Model?.Id)
+            {
+                joined = true;
+                break;
+            }
+        }
+
+        if (joined)
+        {
+            <span>Joined</span>
+        }
+        else
+        {
+            <a asp-controller="UserGymClasses" asp-action="JoinGymClass" asp-route-gymClassID="@Model?.Id">Join</a>
+        }
+        
+    }
+
     <a asp-action="Index">Back to List</a>
 </div>

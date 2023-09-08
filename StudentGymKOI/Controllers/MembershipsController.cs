@@ -43,9 +43,6 @@ namespace StudentGymKOI.Controllers
                 .Where(m => membershipIds.Contains(m.MembershipID))
                 .ToListAsync();
 
-
-            
-
             var userMembership = memberships.FirstOrDefault();
             ViewBag.UserMembership = userMembership;
 

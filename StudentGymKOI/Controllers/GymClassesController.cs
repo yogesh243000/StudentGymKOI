@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +15,41 @@ namespace StudentGymKOI.Controllers
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [Authorize]
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
+
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user.Id;
+
+            var userGymClasses = await _context.UserGymClass
+                .Where(ugc => ugc.UserID == userId)
+                .ToListAsync();
+
+            var gymClassIds = userGymClasses.Select(ugc => ugc.GymClassID).ToList();
+
+            var gymClasses = await _context.GymClass
+                .Where(gc => gymClassIds.Contains(gc.Id))
+                .ToListAsync();
+
+            ViewBag.UserGymClasses = gymClasses;
+
+            
+
+           
+
+            ViewBag.GymClasses = await _context.GymClass.ToListAsync();
               return _context.GymClass != null ? 
-                          View(await _context.GymClass.ToListAsync()) :
+                          View() :
                           Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
         }
 
@@ -44,6 +68,21 @@ namespace StudentGymKOI.Controllers
             {
                 return NotFound();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user.Id;
+
+            var userGymClasses = await _context.UserGymClass
+                .Where(ugc => ugc.UserID == userId)
+                .ToListAsync();
+
+            var gymClassIds = userGymClasses.Select(ugc => ugc.GymClassID).ToList();
+
+            var gymClasses = await _context.GymClass
+                .Where(gc => gymClassIds.Contains(gc.Id))
+                .ToListAsync();
+
+            ViewBag.UserGymClasses = gymClasses;
 
             return View(gymClass);
         }
