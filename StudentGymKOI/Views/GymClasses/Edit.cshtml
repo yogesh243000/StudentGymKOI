@@ -20,9 +20,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="MaxMembers" class="control-label"></label>
-                <input asp-for="MaxMembers" class="form-control" />
+                <input asp-for="MaxMembers" min="@Model?.CurrentMembers" class="form-control" />
                 <span asp-validation-for="MaxMembers" class="text-danger"></span>
             </div>
+            <input hidden asp-for="CurrentMembers" value="@Model?.CurrentMembers"/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

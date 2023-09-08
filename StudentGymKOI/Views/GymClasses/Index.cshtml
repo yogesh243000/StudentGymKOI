@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.MaxMembers)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentMembers)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -32,6 +35,9 @@
             </td>
             <td>
                 @item.MaxMembers
+            </td>
+            <td>
+                    @item.CurrentMembers
             </td>
             <td>
 
@@ -58,11 +64,21 @@
 
                         if (joined)
                         {
-                            <span>Joined</span>
+                            <span>Joined (</span>
+                            <a class="text-danger" asp-controller="UserGymClasses" asp-action="LeaveGymClass" asp-route-gymClassID="@item.Id">Leave</a>
+                            <span>)</span>
                         }
                         else
                         {
-                            <a asp-controller="UserGymClasses" asp-action="JoinGymClass" asp-route-gymClassID="@item.Id">Join</a>
+                            if (item.CurrentMembers < item.MaxMembers)
+                            {
+                                
+                                <a asp-controller="UserGymClasses" asp-action="JoinGymClass" asp-route-gymClassID="@item.Id">Join</a>
+                            }
+                            else
+                            {
+                                <span>Class Full</span>
+                            }
                         }
 
                         

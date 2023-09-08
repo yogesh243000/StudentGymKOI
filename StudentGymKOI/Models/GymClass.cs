@@ -7,6 +7,7 @@
         public string ClassName  { get; set; }
         public int MaxMembers  { get; set; }
 
+        public int CurrentMembers { get; set; } = 0;
 
 
 

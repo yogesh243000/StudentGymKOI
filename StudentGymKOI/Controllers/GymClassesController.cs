@@ -137,7 +137,7 @@ namespace StudentGymKOI.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Gym Staff")]
 
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ClassName,MaxMembers")] GymClass gymClass)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ClassName,MaxMembers,CurrentMembers")] GymClass gymClass)
         {
             if (id != gymClass.Id)
             {
