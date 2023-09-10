@@ -53,39 +53,7 @@ namespace StudentGymKOI.Controllers
                           Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
         }
 
-        [Authorize]
-        // GET: GymClasses/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.GymClass == null)
-            {
-                return NotFound();
-            }
-
-            var gymClass = await _context.GymClass
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gymClass == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            var userId = user.Id;
-
-            var userGymClasses = await _context.UserGymClass
-                .Where(ugc => ugc.UserID == userId)
-                .ToListAsync();
-
-            var gymClassIds = userGymClasses.Select(ugc => ugc.GymClassID).ToList();
-
-            var gymClasses = await _context.GymClass
-                .Where(gc => gymClassIds.Contains(gc.Id))
-                .ToListAsync();
-
-            ViewBag.UserGymClasses = gymClasses;
-
-            return View(gymClass);
-        }
+       
 
         // GET: GymClasses/Create
         [Authorize(Roles = "Gym Staff")]
