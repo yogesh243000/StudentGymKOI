@@ -4,34 +4,39 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
 
-<h4>Membership</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="d-flex align-items-center py-4">
+
+    <section class="form-signin w-100 m-auto">
         <form asp-action="Edit">
+            <h1 class="h3 mb-3 fw-normal">Edit Membership</h1>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="MembershipID" />
             <div class="form-group">
-                <label asp-for="MemberShipName" class="control-label"></label>
+                <label asp-for="MemberShipName" class="control-label">Membership Name</label>
                 <input asp-for="MemberShipName" class="form-control" />
                 <span asp-validation-for="MemberShipName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label asp-for="Price" class="control-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
                 <input asp-for="Price" min="1" class="form-control" />
+                </div>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-    </div>
-</div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+
+    </section>
+
+
 </div>
 
 @section Scripts {
