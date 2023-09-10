@@ -2,69 +2,63 @@
 
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Memberships";
 }
 
-<h1>Index</h1>
+
 @if (User.IsInRole("Gym Staff"))
 {
     <p>
         <a asp-action="Create">Create New</a>
     </p>
 }
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MemberShipName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in ViewBag.Memberships) {
-        <tr>
-            <td>
-                @item.MemberShipName
-            </td>
-            <td>
-                @item.Price
-            </td>
-            <td>
-
-                    <a asp-action="Details" asp-route-id="@item.MembershipID">Details</a>
-
-                    @if (User.IsInRole("Gym Staff"))
-                    {
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+    <h1 class="display-4 fw-normal text-body-emphasis">Memberships</h1>
+   
+</div>
+<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+    @foreach (var item in ViewBag.Memberships)
+    {
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal"> @item.MemberShipName</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">$@item.Price</h1>
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
                         
-                        <a asp-action="Edit" asp-route-id="@item.MembershipID">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.MembershipID">Delete</a>
-                    }
-
-                    @if (User.IsInRole("Member"))
-                    {
-                        @if (ViewBag.UserMembership == null || ViewBag.UserMembership.MemberShipName != item.MemberShipName)
+                        @if (User.IsInRole("Gym Staff"))
                         {
-                            <a asp-controller="UserMembership" asp-action="JoinMembership" asp-route-membershipID="@item.MembershipID">Join</a>
+
+                            <a type="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.MembershipID">Edit</a>
+                            <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.MembershipID">Delete</a>
                         }
-                        else{
+                        @if (User.IsInRole("Member"))
+                        {
+                            @if (ViewBag.UserMembership == null || ViewBag.UserMembership.MemberShipName != item.MemberShipName)
+                            {
+                                <a type="button" class="btn btn-success" asp-controller="UserMembership" asp-action="JoinMembership" asp-route-membershipID="@item.MembershipID">Join</a>
+                            }
+                            else
+                            {
 
+                                <a type="button" class="btn btn-danger" asp-controller="UserMembership" asp-action="LeaveMembership" asp-route-membershipID="@item.MembershipID">Leave</a>
+                                <a type="button" class="btn btn-info disabled">Joined</a>
+                                
+                            }
 
-
-                            <span>Joined</span>
-                            <a asp-controller="UserMembership" asp-action="LeaveMembership" asp-route-membershipID="@item.MembershipID">Leave</a>
-
-                        }
-                        
-                        
                     }
+                     
+                    </div>
+                    
+                   
+                </div>
+            </div>
+        </div>
+       
+    }
+    
+    
 
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</div>

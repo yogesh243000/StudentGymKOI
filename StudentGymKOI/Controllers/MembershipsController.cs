@@ -56,44 +56,7 @@ namespace StudentGymKOI.Controllers
                           Problem("Entity set 'ApplicationDbContext.Membership'  is null.");
         }
 
-        // GET: Memberships/Details/5
-        [Authorize]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Membership == null)
-            {
-                return NotFound();
-            }
-
-            var membership = await _context.Membership
-                .FirstOrDefaultAsync(m => m.MembershipID == id);
-            if (membership == null)
-            {
-                return NotFound();
-            }
-            var user = await _userManager.GetUserAsync(User);
-            var userId = user.Id;
-
-            var userMemberships = await _context.UserMembership
-               .Where(um => um.UserID == userId)
-               .ToListAsync();
-
-            var membershipIds = userMemberships.Select(um => um.MembershipID).ToList();
-
-            var memberships = await _context.Membership
-                .Where(m => membershipIds.Contains(m.MembershipID))
-                .ToListAsync();
-
-
-
-
-            var userMembership = memberships.FirstOrDefault();
-            ViewBag.UserMembership = userMembership;
-
-
-            return View(membership);
-        }
-
+        
         // GET: Memberships/Create
         [Authorize(Roles = "Gym Staff")]
         public IActionResult Create()

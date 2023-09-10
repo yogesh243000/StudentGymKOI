@@ -26,12 +26,9 @@ namespace StudentGymKOI.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
-                var roles = await _userManager.GetRolesAsync(user);
+                
 
-                if ( roles.Count > 0)
-                {
-                    ViewData["UserRole"] = string.Join(",", roles);
-                }
+                
 
                 var userId = user.Id;
                 var userMemberships = await _context.UserMembership

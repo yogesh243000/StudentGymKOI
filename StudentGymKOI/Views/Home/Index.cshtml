@@ -20,36 +20,47 @@
 }
 
 
-@if (ViewData["UserRole"] != null)
-{
-    <h2>Your Role: @ViewData["UserRole"]</h2>
-}
 
 @if (User.IsInRole("Member"))
 {
-    @if (ViewBag.Memberships != null && ViewBag.Memberships.Count > 0)
-    {
-        <h3>Your Current Membership:</h3>
-        <ul>
-            @foreach (var membership in ViewBag.Memberships)
+
+    <center >
+
+    
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            @if (ViewBag.Memberships != null && ViewBag.Memberships.Count > 0)
             {
-                <li>@membership.MemberShipName</li>
+                <h5 class="card-title">Your Membership</h5>
+                
+                    @foreach (var membership in ViewBag.Memberships)
+                    {
+                    <p class="card-text">@membership.MemberShipName</p>
+                    }
+                
             }
-        </ul>
-    }
-    else
-    {
-        <p>You do not have any memberships.</p>
-    }
+            else
+            {
+                <p class="card-text">You do not have any memberships.</p>
+                
+            }
+
+            
+            
+                <a asp-controller="Memberships" asp-action="Index" class="btn btn-primary">Memberships</a>
+        </div>
+    </div>
+    </center>
     
 }
 
 
 
-<h2 class="display-4">Group Members</h2>
+
 
 <div class="container">
-    <table class="table table-striped">
+    <h3>Group Members</h3>
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
 

@@ -5,6 +5,20 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+        if(User.IsInRole("Gym Staff"))
+        {
+
+            <li class="nav-item nav-link">
+                <span class="badge text-bg-light">Role: Staff</span>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item nav-link">
+                <span class="badge text-bg-light">Role: Member</span>
+            </li>
+        }
+
     <li class="nav-item">
         <a  class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
     </li>
