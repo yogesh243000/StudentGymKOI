@@ -1,0 +1,109 @@
+﻿@model IEnumerable<StudentGymKOI.Models.GymClass>
+
+@{
+    ViewData["Title"] = "Gym Classes";
+}
+
+
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+    <h1 class="display-4 fw-normal text-body-emphasis">Gym Classes</h1>
+@if (User.IsInRole("Gym Staff"))
+{
+        <p class="fs-5 text-body-secondary">
+            <a type="button" class="btn btn-primary" asp-action="Create">Create New Gym Class</a>
+    </p>
+}
+</div>
+
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Gym Class
+            </th>
+            <th>
+                Max Members
+            </th>
+            <th>
+                Current Members
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ViewBag.GymClasses) {
+        <tr>
+            <td>
+                @item.ClassName
+            </td>
+            <td>
+                @item.MaxMembers
+            </td>
+            <td>
+                    @item.CurrentMembers
+            </td>
+            <td>
+                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                        @if (User.IsInRole("Gym Staff"))
+                        {
+
+                            <a type="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a type="button" class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                        @if (User.IsInRole("Member"))
+
+                        {
+                            bool joined = false;
+
+                            foreach (var userGymClass in ViewBag.UserGymClasses)
+                            {
+                                if (userGymClass.Id == item.Id)
+                                {
+                                    joined = true;
+                                    break;
+                                }
+                            }
+
+                            if (joined)
+                            {
+                                
+                                <a type="button" class="btn btn-danger" asp-controller="UserGymClasses" asp-action="LeaveGymClass" asp-route-gymClassID="@item.Id">Leave</a>
+                                <a class="btn btn-info disabled">Joined</a>
+                                
+                            }
+                            else
+                            {
+                                if (item.CurrentMembers < item.MaxMembers)
+                                {
+
+
+                                    <a type="button" class="btn btn-success" asp-controller="UserGymClasses" asp-action="JoinGymClass" asp-route-gymClassID="@item.Id">Join</a>
+                                    
+                                }
+                                else
+                                {
+                                    <span class="badge text-bg-danger">Class Full</span>
+                                }
+                            }
+
+
+                        }
+                        
+
+                        
+                    </div>
+
+               
+                    
+
+
+
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

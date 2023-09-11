@@ -12,101 +12,102 @@ using StudentGymKOI.Models;
 
 namespace StudentGymKOI.Controllers
 {
-    
-    public class MembershipsController : Controller
+    public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-
-        public MembershipsController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public GymClassesController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // GET: Memberships
         [Authorize]
+        // GET: GymClasses
         public async Task<IActionResult> Index()
         {
 
             var user = await _userManager.GetUserAsync(User);
             var userId = user.Id;
 
-            var userMemberships = await _context.UserMembership
-               .Where(um => um.UserID == userId)
-               .ToListAsync();
-
-            var membershipIds = userMemberships.Select(um => um.MembershipID).ToList();
-
-            var memberships = await _context.Membership
-                .Where(m => membershipIds.Contains(m.MembershipID))
+            var userGymClasses = await _context.UserGymClass
+                .Where(ugc => ugc.UserID == userId)
                 .ToListAsync();
 
-            var userMembership = memberships.FirstOrDefault();
-            ViewBag.UserMembership = userMembership;
+            var gymClassIds = userGymClasses.Select(ugc => ugc.GymClassID).ToList();
 
-            ViewBag.Memberships = await _context.Membership.ToListAsync();
+            var gymClasses = await _context.GymClass
+                .Where(gc => gymClassIds.Contains(gc.Id))
+                .ToListAsync();
 
+            ViewBag.UserGymClasses = gymClasses;
 
+            
 
+           
 
-            return _context.Membership != null ? 
+            ViewBag.GymClasses = await _context.GymClass.ToListAsync();
+              return _context.GymClass != null ? 
                           View() :
-                          Problem("Entity set 'ApplicationDbContext.Membership'  is null.");
+                          Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
         }
 
-        
-        // GET: Memberships/Create
+       
+
+        // GET: GymClasses/Create
         [Authorize(Roles = "Gym Staff")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Memberships/Create
+        // POST: GymClasses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Gym Staff")]
-        public async Task<IActionResult> Create([Bind("MembershipID,MemberShipName,Price")] Membership membership)
+
+        public async Task<IActionResult> Create([Bind("Id,ClassName,MaxMembers")] GymClass gymClass)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(membership);
+                _context.Add(gymClass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(membership);
+            return View(gymClass);
         }
 
-        // GET: Memberships/Edit/5
+        // GET: GymClasses/Edit/5
         [Authorize(Roles = "Gym Staff")]
+
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Membership == null)
+            if (id == null || _context.GymClass == null)
             {
                 return NotFound();
             }
 
-            var membership = await _context.Membership.FindAsync(id);
-            if (membership == null)
+            var gymClass = await _context.GymClass.FindAsync(id);
+            if (gymClass == null)
             {
                 return NotFound();
             }
-            return View(membership);
+            return View(gymClass);
         }
 
-        // POST: Memberships/Edit/5
+        // POST: GymClasses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Gym Staff")]
-        public async Task<IActionResult> Edit(int id, [Bind("MembershipID,MemberShipName,Price")] Membership membership)
+
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ClassName,MaxMembers,CurrentMembers")] GymClass gymClass)
         {
-            if (id != membership.MembershipID)
+            if (id != gymClass.Id)
             {
                 return NotFound();
             }
@@ -115,12 +116,12 @@ namespace StudentGymKOI.Controllers
             {
                 try
                 {
-                    _context.Update(membership);
+                    _context.Update(gymClass);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MembershipExists(membership.MembershipID))
+                    if (!GymClassExists(gymClass.Id))
                     {
                         return NotFound();
                     }
@@ -131,51 +132,53 @@ namespace StudentGymKOI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(membership);
+            return View(gymClass);
         }
 
-        // GET: Memberships/Delete/5
+        // GET: GymClasses/Delete/5
         [Authorize(Roles = "Gym Staff")]
+
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Membership == null)
+            if (id == null || _context.GymClass == null)
             {
                 return NotFound();
             }
 
-            var membership = await _context.Membership
-                .FirstOrDefaultAsync(m => m.MembershipID == id);
-            if (membership == null)
+            var gymClass = await _context.GymClass
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (gymClass == null)
             {
                 return NotFound();
             }
 
-            return View(membership);
+            return View(gymClass);
         }
 
-        // POST: Memberships/Delete/5
+        // POST: GymClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Gym Staff")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Membership == null)
+            if (_context.GymClass == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Membership'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
             }
-            var membership = await _context.Membership.FindAsync(id);
-            if (membership != null)
+            var gymClass = await _context.GymClass.FindAsync(id);
+            if (gymClass != null)
             {
-                _context.Membership.Remove(membership);
+                _context.GymClass.Remove(gymClass);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MembershipExists(int id)
+        private bool GymClassExists(int id)
         {
-          return (_context.Membership?.Any(e => e.MembershipID == id)).GetValueOrDefault();
+          return (_context.GymClass?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

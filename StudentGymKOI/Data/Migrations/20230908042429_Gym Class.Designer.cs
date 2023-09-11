@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentGymKOI.Data;
 
@@ -11,9 +12,10 @@ using StudentGymKOI.Data;
 namespace StudentGymKOI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230908042429_Gym Class")]
+    partial class GymClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,9 +238,6 @@ namespace StudentGymKOI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CurrentMembers")
-                        .HasColumnType("int");
-
                     b.Property<int>("MaxMembers")
                         .HasColumnType("int");
 
@@ -265,25 +264,6 @@ namespace StudentGymKOI.Data.Migrations
                     b.HasKey("MembershipID");
 
                     b.ToTable("Membership");
-                });
-
-            modelBuilder.Entity("StudentGymKOI.Models.UserGymClass", b =>
-                {
-                    b.Property<int>("UserGymClassID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserGymClassID"), 1L, 1);
-
-                    b.Property<int>("GymClassID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserGymClassID");
-
-                    b.ToTable("UserGymClass");
                 });
 
             modelBuilder.Entity("StudentGymKOI.Models.UserMembership", b =>

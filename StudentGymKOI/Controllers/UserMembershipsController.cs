@@ -52,5 +52,25 @@ namespace StudentGymKOI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-    }
+        public async Task<IActionResult> LeaveMembership(int membershipID)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var userMembership = _context.UserMembership.FirstOrDefault(um => um.UserID==user.Id);
+
+            if(userMembership != null)
+            {
+                _context.UserMembership.Remove(userMembership);
+                await _context.SaveChangesAsync();
+            }
+
+            TempData["LeaveSuccessMessage"] = "You have successfully left the Membership.";
+
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
+
+        }
 }
